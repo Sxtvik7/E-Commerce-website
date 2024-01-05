@@ -8,12 +8,11 @@ import {
   Form,
   Button,
   Card,
-  ListGroupItem,
 } from "react-bootstrap";
 import { FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/Message.jsx";
-import { addToCart } from "../slices/cartSlice.js";
+import { addToCart, removeFromCart } from "../slices/cartSlice.js";
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -23,7 +22,15 @@ const CartScreen = () => {
   const { cartItems } = cart;
 
   const addToCartHandler = async (product, qty) => {
-    dispatch(addToCart({...product, qty}))
+    dispatch(addToCart({ ...product, qty }));
+  };
+
+  const removeFromCartHandler = async (id) => {
+    dispatch(removeFromCart(id));
+  };
+
+  const checkoutHandler = () => {
+    navigate('/login?redirect=/shipping');
   }
 
   return (
@@ -53,7 +60,9 @@ const CartScreen = () => {
                     <Form.Control
                       as="select"
                       value={item.qty}
-                      onChange={(e) => addToCartHandler(item, Number(e.target.value))}
+                      onChange={(e) =>
+                        addToCartHandler(item, Number(e.target.value))
+                      }
                     >
                       {[...Array(item.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
@@ -63,7 +72,11 @@ const CartScreen = () => {
                     </Form.Control>
                   </Col>
                   <Col>
-                    <Button type="button" variant="light">
+                    <Button
+                      type="button"
+                      variant="light"
+                      onClick={() => removeFromCartHandler(item._id)}
+                    >
                       <FaTrash />
                     </Button>
                   </Col>
@@ -91,6 +104,7 @@ const CartScreen = () => {
                 type="button"
                 className="btn-block"
                 disabled={cartItems.length === 0}
+                onClick={checkoutHandler}
               >
                 Proceed to Checkout
               </Button>
