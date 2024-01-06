@@ -11,6 +11,8 @@ import {
   getUserById,
   updateUser,
 } from "../controller/userController.js";
+import { admin, protect } from "../middleware/authMiddleware.js";
+
 
 router.get("/", getUsers);
 router.post("/", registerUser);
@@ -18,8 +20,8 @@ router.post("/", registerUser);
 router.post("/login", authUser);
 router.post("/logout", logoutUser);
 
-router.get("/profile", getUserProfile);
-router.get("/profile", updateUserProfile);
+router.get("/profile", protect, getUserProfile);
+router.get("/profile", protect, updateUserProfile);
 
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
