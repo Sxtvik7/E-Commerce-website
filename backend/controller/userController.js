@@ -40,7 +40,11 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //Logout User
 const logoutUser = asyncHandler(async (req, res) => {
-  res.send("logout user");
+  res.cookie('jwt','', {
+    httpOnly: true,
+    expires: new Date(0)
+  });
+  res.status(200).json({message: 'Logged out successfully'});
 });
 
 //Get User's Profile
@@ -53,7 +57,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   res.send(" update User Profile");
 });
 
-//Update User Profile
+//delete User Profile
 const deleteUser = asyncHandler(async (req, res) => {
   res.send(" Delete User Profile");
 });

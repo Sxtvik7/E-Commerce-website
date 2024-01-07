@@ -14,17 +14,17 @@ import {
 import { admin, protect } from "../middleware/authMiddleware.js";
 
 
-router.get("/", getUsers);
+router.get("/", protect, admin, getUsers);
 router.post("/", registerUser);
 
 router.post("/login", authUser);
 router.post("/logout", logoutUser);
 
 router.get("/profile", protect, getUserProfile);
-router.get("/profile", protect, updateUserProfile);
+router.put("/profile", protect, updateUserProfile);
 
 router.get("/:id", getUserById);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
+router.put("/:id", protect, admin, updateUser);
+router.delete("/:id", protect, admin, deleteUser);
 
 export default router;

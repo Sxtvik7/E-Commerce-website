@@ -3,7 +3,7 @@ import asyncHandler from "./asyncHandler.js";
 import User from "../models/userModel.js";
 
 //Protect routes
- const protect = asyncHandler(async (req, res) => {
+ const protect = asyncHandler(async (req, res, next) => {
   let token;
 
   //Read the JWT from the cookie
@@ -13,7 +13,8 @@ import User from "../models/userModel.js";
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.userId).select("-password");
-      console.log(decoded);
+      next();
+      // console.log(decoded);
     } catch (error) {
       console.log(error);
       res.status(401);
